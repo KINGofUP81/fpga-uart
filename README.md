@@ -4,9 +4,7 @@ Educational UART implementation for the Digilent Zybo board, kept in three paral
 
 - **`uart-vhdl/`** — complete VHDL implementation with testbenches for every block.
 - **`uart-systemverilog/`** — direct SystemVerilog translation of the same architecture.
-- **`uart-systemverilog-mod/`** — work-in-progress extension that adds FIFO status outputs (almost empty/full, word count). It is **not currently compilable**; see [Known issues](#known-issues).
-
-> Status: source-level review only. There are no Vivado project files or build scripts in this tree, and nothing here has been compiled or simulated as part of this documentation pass.
+- **`uart-systemverilog-mod/`** — experimental extension that adds FIFO status outputs (almost empty/full, word count). It is **not currently compilable**; see the limitations section below.
 
 ## Origin / attribution
 
@@ -15,7 +13,7 @@ The UART and FIFO RTL is adapted from the textbook examples by **Pong P. Chu**:
 - *FPGA Prototyping by SystemVerilog Examples: Xilinx MicroBlaze MCS SoC Edition* (Wiley, 2018) — Chapter 7 “FIFO” (Listings 7.2, 7.7, 7.8) and the UART chapter that introduces `baud_gen`, `uart_rx`, `uart_tx`, and the `uart` wrapper.
 - *FPGA Prototyping by VHDL Examples* — corresponding VHDL version of the same designs.
 
-The Zybo constraints and top-level board wrappers were added/retargeted separately. No license file was present in the original sources.
+The Zybo constraints and top-level board wrappers were added and retargeted separately. Refer to the original textbook for its licensing terms.
 
 ---
 
@@ -160,9 +158,7 @@ There are no SystemVerilog testbenches in this tree. The VHDL testbenches are th
 
 ---
 
-## Known issues
-
-These are source-level findings, not simulation results.
+## Limitations / TODO
 
 1. **Top-level TX never starts.**  
    `wr_uart` and `rd_uart` are tied high at the same time in both `top_uart.vhd` and `top_uart.sv`. In `fifo_ctrl`, the simultaneous read/write case advances pointers but does not update `full`/`empty`, so `tx_empty` stays `1` and `tx_start = ~tx_empty` remains `0`.
